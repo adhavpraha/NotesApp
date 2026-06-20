@@ -12,6 +12,10 @@ class NoteStore {
    
     var notes: [Note] = []
     let storageKey = "saved_notes"
+    
+    init() {
+        load()
+    }
 
     func createNote(title: String, content: String) {
         let note = Note(title: title, content: content)
@@ -36,6 +40,13 @@ class NoteStore {
             print("Note title: \(note.title)")
             print("Note Content: \(note.content)")
         }
+    }
+    
+    func load() {
+        guard let data = UserDefaults.standard.data(forKey: storageKey),
+                let decoded = try? JSONDecoder().decode([Note].self, from: data) else { return }
+        
+        notes = decoded.sorted { $0.updatedAt > $1.updatedAt }
     }
     
 }

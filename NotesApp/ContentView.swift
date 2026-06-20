@@ -8,13 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
-    
+    @Environment(NoteStore.self) private var store
     @State private var showDetail = false
     
     var body: some View {
         
         NavigationStack() {
-            emptyState
+                Group {
+                    if store.notes.isEmpty {
+                        emptyState
+                    } else {
+                        notesList
+                    }
+                }
                 .navigationTitle("Notes")
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
@@ -43,8 +49,34 @@ struct ContentView: View {
             .buttonStyle(.borderedProminent)
         }
     }
+    
+    var notesList: some View {
+        List {
+            ForEach(store.notes) { note in
+               NoteRowView(note: note)
+            }
+        }
+    }
 }
 
 #Preview {
     ContentView()
+}
+
+struct NoteRowView: View {
+    let note: Note
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(note.title)
+                .font(.headline)
+                .lineLimit(1)
+            
+            Text(note.content)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .lineLimit(2)
+        }
+        .padding(.vertical, 4)
+    }
 }

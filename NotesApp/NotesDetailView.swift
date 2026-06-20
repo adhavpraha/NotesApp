@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NotesDetailView: View {
     @Environment(NoteStore.self) private var store
+    @Environment(\.dismiss) var dismiss
     
     @State private var title: String
     @State private var content: String
@@ -45,6 +46,7 @@ struct NotesDetailView: View {
     
     func save() {
         store.createNote(title: title, content: content)
+        dismiss()
     }
 }
 
