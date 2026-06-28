@@ -24,6 +24,14 @@ class NoteStore {
         save()
     }
     
+    func updateNote(note: Note) {
+        guard let index = notes.firstIndex(where: { $0.id == note.id }) else { return }
+        var updatedNote = note
+        updatedNote.updatedAt = .now
+        notes[index] = updatedNote
+        save()
+    }
+    
     func save() {
         notes.sort { $0.updatedAt > $1.updatedAt }
         guard let data = try? JSONEncoder().encode(notes) else { return }

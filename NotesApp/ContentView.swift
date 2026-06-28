@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @Environment(NoteStore.self) private var store
     @State private var showDetail = false
+    @State var selNote: Note?
     
     var body: some View {
         
@@ -32,7 +33,7 @@ struct ContentView: View {
                     }
                 }
                 .navigationDestination(isPresented: $showDetail) {
-                    NotesDetailView()
+                    NotesDetailView(note: selNote)
                 }
         }
     }
@@ -54,6 +55,10 @@ struct ContentView: View {
         List {
             ForEach(store.notes) { note in
                NoteRowView(note: note)
+                    .onTapGesture {
+                        selNote = note
+                        showDetail = true
+                    }
             }
         }
     }

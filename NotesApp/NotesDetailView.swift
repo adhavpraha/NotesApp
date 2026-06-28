@@ -11,12 +11,14 @@ struct NotesDetailView: View {
     @Environment(NoteStore.self) private var store
     @Environment(\.dismiss) var dismiss
     
+    var note: Note?
     @State private var title: String
     @State private var content: String
     
-    init() {
-        _title = State(initialValue: "")
-        _content = State(initialValue: "")
+    init(note: Note?) {
+        self.note = note
+        _title = State(initialValue: note?.title ?? "")
+        _content = State(initialValue: note?.content ?? "")
     }
     
     var body: some View {
@@ -45,7 +47,14 @@ struct NotesDetailView: View {
     }
     
     func save() {
-        store.createNote(title: title, content: content)
+        if var note = note {
+            note.title = title
+            note.content = content
+            store.updateNote(note: note)
+        }
+        else {
+            store.createNote(title: title, content: content)
+        }
         dismiss()
     }
 }
