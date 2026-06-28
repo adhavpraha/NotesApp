@@ -32,6 +32,11 @@ class NoteStore {
         save()
     }
     
+    func deleteNote(note: Note) {
+        notes.removeAll(where: { $0.id == note.id })
+        save()
+    }
+    
     func save() {
         notes.sort { $0.updatedAt > $1.updatedAt }
         guard let data = try? JSONEncoder().encode(notes) else { return }

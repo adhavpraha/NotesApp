@@ -45,7 +45,7 @@ struct ContentView: View {
             Text("Tap the compose button to create your first note.")
         } actions: {
             Button("Create Note") {
-                
+                showDetail = true
             }
             .buttonStyle(.borderedProminent)
         }
@@ -58,6 +58,13 @@ struct ContentView: View {
                     .onTapGesture {
                         selNote = note
                         showDetail = true
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button(role: .destructive, action: {
+                            store.deleteNote(note: note)
+                        }, label: {
+                            Label("Delete", systemImage: "trash")
+                        })
                     }
             }
         }
